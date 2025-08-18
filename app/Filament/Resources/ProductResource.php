@@ -26,25 +26,24 @@ class ProductResource extends Resource
                 Section::make()->schema([
                     SpatieMediaLibraryFileUpload::make('cover')
                         ->image()
-                        ->collection('cover')
-                        ->required(),
+                        ->collection('cover'),
                     SpatieMediaLibraryFileUpload::make('gallery')
                         ->image()
                         ->collection('gallery')
-                        ->multiple()
-                        ->required(),
+                        ->multiple(),
                     Forms\Components\TextInput::make('name')
                         ->required()
                         ->label('Product Name')
                         ->maxLength(255),
                     SpatieTagsInput::make('tags')
-                        ->type('collection')
-                        ->required(),
+                        ->type('collection'),
                     Forms\Components\TextInput::make('sku')
                         ->label('SKU')
                         ->required()
+                        ->unique(ignoreRecord: true)
                         ->maxLength(255),
                     Forms\Components\TextInput::make('slug')
+                        ->unique(ignoreRecord: true)
                         ->required(),
                     Forms\Components\Textarea::make('description')
                         ->columnSpanFull(),
