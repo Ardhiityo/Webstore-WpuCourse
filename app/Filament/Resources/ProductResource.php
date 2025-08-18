@@ -2,17 +2,16 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
-use App\Models\Product;
 use Filament\Forms;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Product;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\SpatieTagsInput;
+use App\Filament\Resources\ProductResource\Pages;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class ProductResource extends Resource
 {
@@ -25,17 +24,28 @@ class ProductResource extends Resource
         return $form
             ->schema([
                 Section::make()->schema([
+                    SpatieMediaLibraryFileUpload::make('cover')
+                        ->image()
+                        ->collection('cover')
+                        ->required(),
+                    SpatieMediaLibraryFileUpload::make('gallery')
+                        ->image()
+                        ->collection('gallery')
+                        ->multiple()
+                        ->required(),
                     Forms\Components\TextInput::make('name')
                         ->required()
                         ->label('Product Name')
                         ->maxLength(255),
+                    SpatieTagsInput::make('tags')
+                        ->type('collection')
+                        ->required(),
                     Forms\Components\TextInput::make('sku')
                         ->label('SKU')
                         ->required()
                         ->maxLength(255),
                     Forms\Components\TextInput::make('slug')
-                        ->required()
-                        ->maxLength(255),
+                        ->required(),
                     Forms\Components\Textarea::make('description')
                         ->columnSpanFull(),
                     Forms\Components\TextInput::make('price')

@@ -2,17 +2,32 @@
 
 namespace App\Models;
 
+use Spatie\Tags\HasTags;
+use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Product extends Model
+class Product extends Model implements HasMedia
 {
-    protected $fillable = [
-        'name',
-        'sku',
-        'slug',
-        'description',
-        'price',
-        'stock',
-        'weight',
-    ];
+    use InteractsWithMedia, HasTags;
+
+    // protected $fillable = [
+    //     'name',
+    //     'sku',
+    //     'slug',
+    //     'description',
+    //     'price',
+    //     'stock',
+    //     'weight',
+    // ];
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this
+            ->addMediaConversion('cover')
+            ->fit(Fit::Contain, 300, 300)
+            ->nonQueued();
+    }
 }
