@@ -59,7 +59,7 @@
              </div>
              <div class="grid grid-cols-1 gap-5 my-5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
                  @forelse ($products as $product)
-                     <x-single-product-card :product='$product' />
+                     <x-single-product-card :product="$product" />
                  @empty
                      <div class="col-span-full text-center text-gray-500">
                          No products found.
