@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
 use App\Models\Product;
@@ -34,7 +36,7 @@ class ProductData extends Data
             sku: $product->sku,
             slug: $product->slug,
             description: $product->description,
-            price: $product->price,
+            price: (float)$product->price,
             stock: $product->stock,
             weight: $product->weight,
             cover: $product->getFirstMediaUrl('cover')

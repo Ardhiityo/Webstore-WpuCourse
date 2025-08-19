@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Tag;
 use Spatie\Tags\HasTags;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;

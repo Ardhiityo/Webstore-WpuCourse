@@ -2,9 +2,11 @@
 
 namespace App\Livewire;
 
-use App\Data\ProductData;
+use App\Data\ProductCollectionData;
+use App\Models\Tag;
 use App\Models\Product;
 use Livewire\Component;
+use App\Data\ProductData;
 
 class ProductCatalog extends Component
 {
@@ -14,6 +16,10 @@ class ProductCatalog extends Component
 
         ProductData::collect($products);
 
-        return view('livewire.product-catalog', compact('products'));
+        $tags = Tag::query()->withType('collection')->withCount('products')->get();
+
+        $collections = ProductCollectionData::collect($tags);
+
+        return view('livewire.product-catalog', compact('products', 'collections'));
     }
 }
