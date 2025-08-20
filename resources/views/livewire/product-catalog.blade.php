@@ -5,6 +5,11 @@
                  <div class="space-y-3">
                      <input type="text" placeholder="Search" wire:model.live='keyword'
                          class="py-2.5 sm:py-3 px-4 block w-full border-gray-200 rounded-lg sm:text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
+                     @error('keyword')
+                         <div class="text-red-500 text-center text-xs">
+                             {{ $message }}
+                         </div>
+                     @enderror
                  </div>
                  <span class="block mt-5 mb-2 text-lg font-semibold text-gray-800 dark:text-neutral-200">
                      Collections
@@ -24,6 +29,11 @@
                              <span class="text-xs text-gray-800 font-loght">{{ $tag->products_count }}</span>
                          </div>
                      @endforeach
+                     @error('collections.*')
+                         <div class="text-red-500 text-center text-xs">
+                             {{ $message }}
+                         </div>
+                     @enderror
                  </div>
                  <div class="grid grid-cols-2 mt-10">
                      <button type="button" wire:click='applyFilter'
@@ -39,19 +49,28 @@
          </div>
          <div class="col-span-1 md:col-span-7">
              <div class="flex items-center justify-between gap-5">
-                 <div class="font-light text-gray-800">Results: {{ $products->total() }} Items</div>
+                 <div class="font-light text-gray-800">Results: {{ empty($products) ? 0 : $products->total() }}
+                     Items
+                 </div>
                  <div class="flex items-center gap-2">
                      <span class="text-sm font-light text-gray-800 dark:text-neutral-200">
                          Sort By :
                      </span>
-                     <select wire:model='sort_by'
-                         class="px-3 py-2 text-sm border-gray-200 rounded-lg pe-9 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
-                         <option selected="">Open this select menu</option>
-                         <option value="latest">Product Latest</option>
-                         <option value="oldest">Product Oldest</option>
-                         <option value="price_asc">Product Price A-Z</option>
-                         <option value="price_desc">Product Price Z-A</option>
-                     </select>
+                     <div class="flex flex-col gap-2">
+                         <select wire:model='sort_by'
+                             class="px-3 py-2 text-sm border-gray-200 rounded-lg pe-9 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600">
+                             <option selected="">Open this select menu</option>
+                             <option value="latest">Product Latest</option>
+                             <option value="oldest">Product Oldest</option>
+                             <option value="price_asc">Product Price A-Z</option>
+                             <option value="price_desc">Product Price Z-A</option>
+                         </select>
+                         @error('sort_by')
+                             <div class="text-red-500 text-center text-xs">
+                                 {{ $message }}
+                             </div>
+                         @enderror
+                     </div>
                  </div>
              </div>
              <div class="grid grid-cols-1 gap-5 my-5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
@@ -63,7 +82,9 @@
                      </div>
                  @endforelse
              </div>
-             {{ $products->links() }}
+             @if ($products)
+                 {{ $products->links() }}
+             @endif
          </div>
      </div>
  </div>
