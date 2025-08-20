@@ -11,7 +11,9 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieTagsInput;
 use App\Filament\Resources\ProductResource\Pages;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Support\Markdown;
 
 class ProductResource extends Resource
 {
@@ -45,8 +47,7 @@ class ProductResource extends Resource
                     Forms\Components\TextInput::make('slug')
                         ->unique(ignoreRecord: true)
                         ->required(),
-                    Forms\Components\Textarea::make('description')
-                        ->columnSpanFull(),
+                    MarkdownEditor::make('description'),
                     Forms\Components\TextInput::make('price')
                         ->required()
                         ->numeric()

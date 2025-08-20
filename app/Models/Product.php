@@ -7,6 +7,7 @@ use Spatie\Tags\HasTags;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Number;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -23,6 +24,11 @@ class Product extends Model implements HasMedia
     //     'stock',
     //     'weight',
     // ];
+
+    public function getPriceAttribute($value)
+    {
+        return Number::currency($value);
+    }
 
     public function registerMediaConversions(?Media $media = null): void
     {

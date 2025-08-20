@@ -1,4 +1,4 @@
-<x-store-layout title="Product Name">
+<x-layouts.app>
     <div class="container mx-auto max-w-[85rem] w-full px-4 sm:px-6 lg:px-8 py-10">
         <div class="grid grid-cols-1 gap-10 my-5 md:grid-cols-10">
             <div class="grid grid-cols-1 gap-2 md:col-span-7">
@@ -20,11 +20,11 @@
             <div class="md:col-span-3">
                 <div class="flex flex-col gap-2">
                     <div>
-                        <h1 class="text-3xl font-semibold">Product Name</h1>
-                        <h2 class="text-sm text-gray-800">Ebook, Software Engineer, Web Developer</h2>
-                        <h3 class="text-xs text-gray-500">sku: 123</h2>
+                        <h1 class="text-3xl font-semibold">{{ $product->name }}</h1>
+                        <h2 class="text-sm text-gray-800">{{ $product->slug }}</h2>
+                        <h3 class="text-xs text-gray-500">sku: {{ $product->sku }}</h2>
                     </div>
-                    <span class="mt-2 text-2xl font-bold">Rp123.123</span>
+                    <span class="mt-2 text-2xl font-bold">{{ $product->price }}</span>
                 </div>
                 <div>
                     <div class="flex items-center gap-2 my-5">
@@ -46,7 +46,6 @@
                                         class="p-0 w-6 bg-transparent border-0 text-gray-800 text-center focus:ring-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none dark:text-white"
                                         style="-moz-appearance: textfield;" type="number" x-model.number="quantity"
                                         @input="if(quantity < 0) quantity = 0" min="0">
-
 
                                     <!-- Tombol tambah -->
                                     <button type="button"
@@ -81,26 +80,15 @@
                 </div>
                 <div>
                     <h3 class="font-semibold">Description</h3>
-                    <div class="my-2 prose text-gray-800 dark:text-neutral-200">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, aut consequuntur? Sapiente
-                            repellat odit eos, ipsam laudantium obcaecati animi provident voluptatum voluptate
-                            perferendis cum accusantium ullam quod veritatis. Harum, maxime.</p>
-                        <p>Unde error dolores vel dicta hic accusamus nam reprehenderit veritatis itaque, necessitatibus
-                            eligendi dolorum. Eaque fuga porro aliquam, soluta fugiat sapiente assumenda aspernatur
-                            veniam, animi deleniti quidem dolorum quas iure.</p>
-                        <p>Magnam et saepe, maxime ex beatae laudantium possimus provident aut ea necessitatibus
-                            pariatur tempore quis alias, accusantium dolorum illo! Consequatur vero rem id deserunt
-                            illum aut ex magni animi quis.</p>
-                        <p>Aspernatur quaerat facere dolores quos enim doloremque optio ullam, iste illo facilis!
-                            Nostrum aperiam itaque, sint cum minima quod voluptate inventore ex culpa ipsam soluta
-                            explicabo, labore quasi atque deserunt.</p>
+                    <div class="my-2 prose text-gray-800 dark:text-gray-800">
+                        {!! $product->description !!}
                     </div>
                 </div>
             </div>
             <div class="md:col-span-10">
-                <x-product-sections title="You may also like" :url="route('product-catalog')" />
+                {{-- <x-product-sections title="You may also like" :url="route('product-catalog')" /> --}}
             </div>
 
         </div>
     </div>
-</x-store-layout>
+</x-layouts.app>
