@@ -25,11 +25,6 @@ class Product extends Model implements HasMedia
     //     'weight',
     // ];
 
-    public function getPriceAttribute($value)
-    {
-        return Number::currency($value);
-    }
-
     public function registerMediaConversions(?Media $media = null): void
     {
         $this

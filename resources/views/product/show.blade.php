@@ -3,17 +3,13 @@
         <div class="grid grid-cols-1 gap-10 my-5 md:grid-cols-10">
             <div class="grid grid-cols-1 gap-2 md:col-span-7">
                 <div class="w-full">
-                    <img src="https://images.unsplash.com/photo-1569385210246-0873a782fd59?q=80&w=1760&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Cover" class="object-cover w-full rounded-md aspect-3/2 md:col-span-3">
+                    <img src="{{ $product->cover }}" alt="{{ $product->name }}"
+                        class="object-cover w-full rounded-md aspect-3/2 md:col-span-3">
                     <div class="grid grid-cols-1 gap-2 my-2 md:grid-cols-3 md:col-span-7">
-                        <img src="https://images.unsplash.com/photo-1569097941209-aca563eb07d8?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="image-1" class="object-cover rounded-md aspect-square" />
-                        <img src="https://images.unsplash.com/photo-1569097941209-aca563eb07d8?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="image-1" class="object-cover rounded-md aspect-square" />
-                        <img src="https://images.unsplash.com/photo-1569097941209-aca563eb07d8?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="image-1" class="object-cover rounded-md aspect-square" />
-                        <img src="https://images.unsplash.com/photo-1569097941209-aca563eb07d8?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="image-1" class="object-cover rounded-md aspect-square" />
+                        @foreach ($product->gallery as $image)
+                            <img src="{{ $image }}" alt="{{ $product->slug }}"
+                                class="object-cover rounded-md aspect-square" />
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -24,7 +20,7 @@
                         <h2 class="text-sm text-gray-800">{{ $product->slug }}</h2>
                         <h3 class="text-xs text-gray-500">sku: {{ $product->sku }}</h2>
                     </div>
-                    <span class="mt-2 text-2xl font-bold">{{ $product->price }}</span>
+                    <span class="mt-2 text-2xl font-bold">{{ $product->price_formatted }}</span>
                 </div>
                 <div>
                     <div class="flex items-center gap-2 my-5">
@@ -81,14 +77,13 @@
                 <div>
                     <h3 class="font-semibold">Description</h3>
                     <div class="my-2 prose text-gray-800 dark:text-gray-800">
-                        {!! $product->description !!}
+                        {!! Str::markdown($product->description) !!}
                     </div>
                 </div>
             </div>
             <div class="md:col-span-10">
                 {{-- <x-product-sections title="You may also like" :url="route('product-catalog')" /> --}}
             </div>
-
         </div>
     </div>
 </x-layouts.app>
