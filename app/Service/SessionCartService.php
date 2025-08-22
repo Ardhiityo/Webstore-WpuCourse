@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Data\CartData;
 use App\Data\CartItemData;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use App\Contract\CartServiceInterface;
 use Spatie\LaravelData\DataCollection;
 use Illuminate\Support\Facades\Session;
@@ -38,13 +39,18 @@ class SessionCartService implements CartServiceInterface
     public function addOrUpdate(CartItemData $item)
     {
         $collection = $this->load()->toCollection();
+
         $updated = false;
 
         $cart = $collection->map(function (CartItemData $i) use ($item, &$updated) {
             if ($i->sku === $item->sku) {
+                $i->quantity = $item->quantity;
                 $updated = true;
             }
             return $i;
+
+            // values = untuk mereset index collection
+            // collect = untuk mengembalikan collection
         })->values()->collect();
 
         if (!$updated) {
@@ -52,6 +58,8 @@ class SessionCartService implements CartServiceInterface
         }
 
         $this->save($cart);
+
+        Log::info(json_encode($cart, JSON_PRETTY_PRINT));
     }
 
     public function remove(string $sku)

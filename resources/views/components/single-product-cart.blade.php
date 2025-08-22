@@ -50,8 +50,6 @@
                 <p class="px-3 py-2 mt-1 text-xl font-semibold text-black dark:text-black">
                     Rp.123.456
                 </p>
-
-
             </div>
         </div>
     </div>
