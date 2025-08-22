@@ -1,5 +1,5 @@
  <div>
-     <div class="flex items-center gap-2 my-5">
+     <div class="flex flex-col justify-center items-start gap-2 my-5">
          <div x-data="{ quantity: @entangle('quantity') }" class="flex gap-2 items-centerm y-5">
              <div
                  class="inline-block px-3 py-2 bg-white border border-gray-200 rounded-lg dark:bg-neutral-900 dark:border-neutral-700">
@@ -48,5 +48,13 @@
                  </svg>
              </button>
          </div>
+         <div>
+             <span class="text-dark text-sm">{{ $stock }} in stock</span>
+         </div>
+         @error('quantity')
+             <div>
+                 <span class="text-red-500 text-sm">{{ $message }}</span>
+             </div>
+         @enderror
      </div>
  </div>

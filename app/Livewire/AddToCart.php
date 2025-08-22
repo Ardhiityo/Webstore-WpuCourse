@@ -18,6 +18,8 @@ class AddToCart extends Component
 
     public function addToCart(CartServiceInterface $cart)
     {
+        $this->validate();
+
         $cart->addOrUpdate(new CartItemData(
             sku: $this->sku,
             quantity: $this->quantity,
@@ -33,6 +35,15 @@ class AddToCart extends Component
         $this->stock = $product->stock;
         $this->weight = $product->weight;
         $this->quantity = $cart->getItemBySku($product->sku)->quantity ?? 1;
+
+        $this->validate();
+    }
+
+    public function rules()
+    {
+        return [
+            'quantity' => 'required|integer|min:1|max:' . $this->stock
+        ];
     }
 
     public function render()
