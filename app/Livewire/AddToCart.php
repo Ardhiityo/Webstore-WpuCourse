@@ -26,6 +26,8 @@ class AddToCart extends Component
             weight: $this->weight,
             price: $this->price
         ));
+
+        $this->dispatch('cart-updated');
     }
 
     public function mount(ProductData $product, CartServiceInterface $cart)
