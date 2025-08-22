@@ -22,13 +22,13 @@
                     </div>
                     <span class="mt-2 text-2xl font-bold">{{ $product->price_formatted }}</span>
                 </div>
-                <livewire:add-to-cart>
-                    <div>
-                        <h3 class="font-semibold">Description</h3>
-                        <div class="my-2 prose text-gray-800 dark:text-gray-800">
-                            {!! Str::markdown($product->description) !!}
-                        </div>
+                <livewire:add-to-cart :product="$product" />
+                <div>
+                    <h3 class="font-semibold">Description</h3>
+                    <div class="my-2 prose text-gray-800 dark:text-gray-800">
+                        {!! Str::markdown($product->description) !!}
                     </div>
+                </div>
             </div>
             <div class="md:col-span-10">
                 {{-- <x-product-sections title="You may also like" :url="route('product-catalog')" /> --}}
