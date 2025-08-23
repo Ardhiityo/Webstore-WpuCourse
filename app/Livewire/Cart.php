@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Illuminate\Support\Collection;
 use App\Contract\CartServiceInterface;
 
