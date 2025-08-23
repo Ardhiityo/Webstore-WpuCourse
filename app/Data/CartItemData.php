@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Data;
 
 use App\Models\Product;
-use Livewire\Attributes\Computed;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Attributes\Computed;
 
 class CartItemData extends Data
 {
@@ -17,7 +17,7 @@ class CartItemData extends Data
         public $weight
     ) {}
 
-    #[Computed()]
+    #[Computed]
     public function product(): ProductData
     {
         return ProductData::fromModel(Product::where('sku', $this->sku)->first());

@@ -13,10 +13,10 @@ use Spatie\LaravelData\Attributes\DataCollectionOf;
 class CartData extends Data
 {
     #[Computed()]
-    public $total;
-    public $total_weight;
-    public $total_quantity;
-    public $total_formatted;
+    public float $total;
+    public int $total_weight;
+    public int $total_quantity;
+    public string $total_formatted;
 
     public function __construct(
         #[DataCollectionOf(CartItemData::class)]
