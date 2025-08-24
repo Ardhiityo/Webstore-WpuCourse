@@ -15,21 +15,21 @@ class ValidateCartStock
 
     public function handle()
     {
-        $insufficient = [];
+        $insufficient = collect([]);
 
         foreach ($this->cart->all()->items as $item) {
             $product = $item->product();
             if (!$product || $product->stock < $item->quantity) {
-                $insufficient[] = [
+                $insufficient->push([
                     'sku' => $item->sku,
                     'name' => $product->name,
                     'requested' => $item->quantity,
                     'available' => $product->stock,
-                ];
+                ]);
             }
         }
 
-        if ($insufficient) {
+        if ($insufficient->isNotEmpty()) {
             return throw ValidationException::withMessages([
                 'cart' => [
                     'Some items in your cart are out of stock.',
