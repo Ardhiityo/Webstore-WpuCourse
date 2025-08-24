@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Livewire\Attributes\On;
+use App\Actions\ValidateCartStock;
 use Illuminate\Support\Collection;
 use App\Contract\CartServiceInterface;
 
@@ -22,6 +22,16 @@ class Cart extends Component
     public function getItemsProperty(CartServiceInterface $cart): Collection
     {
         return $cart->all()->items->toCollection();
+    }
+
+    public function checkout()
+    {
+        try {
+            ValidateCartStock::run();
+            return redirect()->route('checkout');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->route('cart')->with('error', $e->getMessage());
+        }
     }
 
     public function render()
