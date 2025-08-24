@@ -58,8 +58,6 @@ class SessionCartService implements CartServiceInterface
         }
 
         $this->save($cart);
-
-        Log::info(json_encode($cart, JSON_PRETTY_PRINT));
     }
 
     public function remove(string $sku)

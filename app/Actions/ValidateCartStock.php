@@ -2,9 +2,10 @@
 
 namespace App\Actions;
 
+use Illuminate\Support\Facades\Log;
 use App\Contract\CartServiceInterface;
-use Illuminate\Validation\ValidationException;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Illuminate\Validation\ValidationException;
 
 class ValidateCartStock
 {
@@ -14,24 +15,25 @@ class ValidateCartStock
 
     public function handle()
     {
-        $insufficient = collect([]);
+        $insufficient = [];
 
         foreach ($this->cart->all()->items as $item) {
-            if ($item->product()->stock < $item->quantity) {
-                $insufficient->push([
+            $product = $item->product();
+            if (!$product || $product->stock < $item->quantity) {
+                $insufficient[] = [
                     'sku' => $item->sku,
-                    'name' => $item->product()->name,
+                    'name' => $product->name,
                     'requested' => $item->quantity,
-                    'available' => $item->product()->stock,
-                ]);
+                    'available' => $product->stock,
+                ];
             }
         }
 
-        if ($insufficient->isNotEmpty()) {
-            return ValidationException::withMessages([
+        if ($insufficient) {
+            return throw ValidationException::withMessages([
                 'cart' => [
                     'Some items in your cart are out of stock.',
-                    'details' => $insufficient
+                    'detail' => $insufficient,
                 ],
             ]);
         }
