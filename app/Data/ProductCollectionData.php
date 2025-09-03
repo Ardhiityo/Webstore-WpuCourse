@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
 use App\Models\Tag;
-use App\Models\Product;
 use Spatie\LaravelData\Data;
 
 class ProductCollectionData extends Data
@@ -21,7 +22,7 @@ class ProductCollectionData extends Data
             $tag->id,
             (string)$tag->name,
             (string)$tag->slug,
-            $tag->products_count
+            (int)$tag->products_count
         );
     }
 }
