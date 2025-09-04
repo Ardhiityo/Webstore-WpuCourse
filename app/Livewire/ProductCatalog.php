@@ -10,17 +10,35 @@ use Livewire\Component;
 use App\Data\ProductData;
 use Livewire\WithPagination;
 use App\Data\ProductCollectionData;
+use Illuminate\Support\Facades\Log;
 
 class ProductCatalog extends Component
 {
     use WithPagination;
 
     public string $search = '';
-    public array $select_collection = [];
+    public $select_collection = [];
     public string $sort_by = 'latest';
+
+    public function rules(): array
+    {
+        return [
+            'search' => ['nullable', 'min:3', 'max:30'],
+            'select_collection' => ['array'],
+            'select_collection.*' => ['integer', 'exists:tags,id'],
+            'sort_by' => ['in:latest,oldest,price_asc,price_desc']
+        ];
+    }
+
+    public function mount()
+    {
+        $this->validate();
+    }
 
     public function applyFilters()
     {
+        $this->validate();
+
         $this->resetPage();
     }
 
@@ -30,6 +48,7 @@ class ProductCatalog extends Component
         $this->search = '';
         $this->sort_by = 'latest';
         $this->resetPage();
+        $this->resetErrorBag();
     }
 
     protected function queryString()
@@ -49,6 +68,13 @@ class ProductCatalog extends Component
 
     public function render()
     {
+        $products = ProductCollectionData::collect([]);
+        $collections = ProductData::collect([]);
+
+        if ($this->getErrorBag()->isNotEmpty()) {
+            return view('livewire.product-catalog', compact('products', 'collections'));
+        }
+
         $result = Product::query();
 
         if ($keyword = $this->search) {
