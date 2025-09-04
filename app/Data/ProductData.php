@@ -20,6 +20,7 @@ class ProductData extends Data
         public string $sku,
         public string|null $description,
         public int $stock,
+        public string $slug,
         public float $price,
         public int $weight,
         public string $cover_url
@@ -35,6 +36,7 @@ class ProductData extends Data
             $product->sku,
             $product->description,
             $product->stock,
+            $product->slug,
             (float)$product->price,
             $product->weight,
             $product->getFirstMediaUrl('cover')

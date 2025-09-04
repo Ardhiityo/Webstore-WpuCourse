@@ -9,7 +9,7 @@
     <!-- Grid -->
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         @for ($i = 0; $i < 3; $i++)
-            <x-single-product-card />
+            <x-single-product-card :product="$product" />
         @endfor
     </div>
     <div class="flex justify-center w-full mt-5">

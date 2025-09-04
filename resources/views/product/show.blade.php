@@ -1,4 +1,4 @@
-<x-store-layout title="Product Name">
+<x-layouts.app title="Product Name">
     <div class="container mx-auto max-w-[85rem] w-full px-4 sm:px-6 lg:px-8 py-10">
         <div class="grid grid-cols-1 gap-10 my-5 md:grid-cols-10">
             <div class="grid grid-cols-1 gap-2 md:col-span-7">
@@ -103,5 +103,4 @@
 
         </div>
     </div>
-
-</x-store-layout>
+</x-layouts.app>
