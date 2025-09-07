@@ -9,6 +9,9 @@ use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Section;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\SpatieTagsInput;
@@ -31,33 +34,32 @@ class ProductResource extends Resource
                     Forms\Components\TextInput::make('name')
                         ->required()
                         ->maxLength(255),
-                    Forms\Components\TextInput::make('slug')
-                        ->required()
-                        ->unique(ignoreRecord: true)
-                        ->maxLength(255),
                     Forms\Components\TextInput::make('sku')
                         ->label('SKU')
                         ->required()
-                        ->unique(ignoreRecord: true)
                         ->maxLength(255),
-                    SpatieTagsInput::make('tags')
-                        ->type('collection'),
                     SpatieMediaLibraryFileUpload::make('cover')
-                        ->collection('cover'),
+                        ->collection('cover')
+                        ->required(),
                     SpatieMediaLibraryFileUpload::make('gallery')
                         ->collection('gallery')
                         ->multiple(),
+                    SpatieTagsInput::make('tags')
+                        ->type('collection'),
+                    Forms\Components\TextInput::make('slug')
+                        ->required()
+                        ->maxLength(255),
                     RichEditor::make('description')
                         ->required()
                         ->columnSpanFull(),
-                    Forms\Components\TextInput::make('stock')
-                        ->required()
-                        ->numeric()
-                        ->default(0),
                     Forms\Components\TextInput::make('price')
                         ->required()
                         ->numeric()
                         ->prefix('IDR'),
+                    Forms\Components\TextInput::make('stock')
+                        ->required()
+                        ->numeric()
+                        ->default(0),
                     Forms\Components\TextInput::make('weight')
                         ->required()
                         ->numeric()
@@ -76,16 +78,17 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('sku')
                     ->label('SKU')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('slug')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('price')
+                    ->money()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('price')
-                    ->money('IDR')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('weight')
                     ->numeric()
-                    ->sortable()
-                    ->suffix(' gram'),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

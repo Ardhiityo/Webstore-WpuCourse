@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Livewire;
 
 use App\Models\Tag;
@@ -10,7 +8,6 @@ use Livewire\Component;
 use App\Data\ProductData;
 use Livewire\WithPagination;
 use App\Data\ProductCollectionData;
-use Illuminate\Support\Facades\Log;
 
 class ProductCatalog extends Component
 {
@@ -20,14 +17,19 @@ class ProductCatalog extends Component
     public $select_collection = [];
     public string $sort_by = 'latest';
 
-    public function rules(): array
+    protected function queryString()
     {
         return [
-            'search' => ['nullable', 'min:3', 'max:30'],
-            'select_collection' => ['array'],
-            'select_collection.*' => ['integer', 'exists:tags,id'],
-            'sort_by' => ['in:latest,oldest,price_asc,price_desc']
+            'search' => ['except' => ''],
+            'select_collection' => ['except' => []],
+            'sort_by' => ['except' => 'latest'],
         ];
+    }
+
+    public function applyFilters()
+    {
+        $this->validate();
+        $this->resetPage();
     }
 
     public function mount()
@@ -35,78 +37,64 @@ class ProductCatalog extends Component
         $this->validate();
     }
 
-    public function applyFilters()
-    {
-        $this->validate();
-
-        $this->resetPage();
-    }
-
     public function resetFilters()
     {
-        $this->select_collection = [];
-        $this->search = '';
-        $this->sort_by = 'latest';
-        $this->resetPage();
+        $this->reset();
         $this->resetErrorBag();
+        $this->resetPage();
     }
 
-    protected function queryString()
+    public function rules(): array
     {
         return [
-            'search' => [
-                'except' => '',
-            ],
-            'select_collection' => [
-                'except' => []
-            ],
-            'sort_by' => [
-                'except' => 'latest'
-            ]
+            'search' => ['nullable', 'min:3', 'max:20'],
+            'select_collection' => ['array'],
+            'select_collection.*' => ['int', 'exists:tags,id'],
+            'sort_by' => ['in:latest,oldest,price_asc,price_desc']
         ];
     }
 
     public function render()
     {
-        $products = ProductCollectionData::collect([]);
-        $collections = ProductData::collect([]);
+        $products = ProductData::collect([]);
+        $collections = ProductCollectionData::collect([]);
 
         if ($this->getErrorBag()->isNotEmpty()) {
             return view('livewire.product-catalog', compact('products', 'collections'));
         }
 
-        $result = Product::query();
+        $query = Product::query();
 
-        if ($keyword = $this->search) {
-            $result->whereLike('name', "%{$keyword}%");
+        if ($this->search) {
+            $query->whereLike('name', "%{$this->search}%");
         }
 
         if (!empty($this->select_collection)) {
-            $result->whereHas(
+            $query->whereHas(
                 'tags',
-                fn($query) => $query->whereIn('id', $this->select_collection)
+                fn($q) => $q->whereIn('id', $this->select_collection)
             );
         }
 
         switch ($this->sort_by) {
             case 'oldest':
-                $result->oldest();
+                $query->oldest();
                 break;
             case 'price_asc':
-                $result->orderBy('price', 'asc');
+                $query->orderBy('price', 'asc');
                 break;
             case 'price_desc':
-                $result->orderBy('price', 'desc');
+                $query->orderBy('price', 'desc');
                 break;
             default:
-                $result->latest();
+                $query->latest();
         }
 
-        $products = ProductData::collect($result->paginate(9));
+        $products = ProductData::collect($query->paginate(9));
 
-        $collection_result = Tag::withType('collection')->withCount('products')->get();
+        $result_collections = Tag::withType('collection')->withCount('products')->get();
 
-        $collections = ProductCollectionData::collect($collection_result);
+        $collections = ProductCollectionData::collect($result_collections);
 
         return view('livewire.product-catalog', compact('products', 'collections'));
     }

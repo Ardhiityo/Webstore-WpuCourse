@@ -6,7 +6,7 @@ use App\Contract\CartServiceInterface;
 use App\Data\ProductData;
 use Livewire\Component;
 
-class RemoveCartItem extends Component
+class CartItemRemove extends Component
 {
     public string $sku;
 
@@ -19,13 +19,15 @@ class RemoveCartItem extends Component
     {
         $service->remove($this->sku);
 
-        session()->flash('success', "The product {$this->sku} has been deleted");
+        $this->dispatch('cart-updated');
+
+        session()->flash('success', "Product {$this->sku} has been deleted");
 
         return redirect()->route('cart');
     }
 
     public function render()
     {
-        return view('livewire.remove-cart-item');
+        return view('livewire.cart-item-remove');
     }
 }

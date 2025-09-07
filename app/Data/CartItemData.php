@@ -12,12 +12,13 @@ class CartItemData extends Data
 {
     public function __construct(
         public string $sku,
-        public int $quantity,
-        public int $weight
+        public int $weight,
+        public float $price,
+        public int $quantity
     ) {}
 
-    #[Computed()]
-    public function product(): ProductData
+    #[Computed]
+    public function product()
     {
         return ProductData::fromModel(Product::where('sku', $this->sku)->first());
     }

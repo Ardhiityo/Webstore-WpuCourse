@@ -19,13 +19,13 @@ class ProductData extends Data
         public string $name,
         public string $short_desc,
         public string $sku,
-        public string|null $description,
-        public int $stock,
         public string $slug,
-        public float $price,
+        public int $stock,
         public int $weight,
+        public float $price,
+        public string $description,
         public string $cover_url,
-        public array|Optional $gallery = new Optional()
+        public array|Optional $gallery
     ) {
         $this->price_formatted = Number::currency($price);
     }
@@ -36,15 +36,13 @@ class ProductData extends Data
             $product->name,
             $product->tags()->where('type', 'collection')->pluck('name')->implode(', '),
             $product->sku,
-            $product->description,
-            $product->stock,
             $product->slug,
-            (float)$product->price,
+            $product->stock,
             $product->weight,
+            (float)$product->price,
+            $product->description,
             $product->getFirstMediaUrl('cover'),
-            $with_gallery ? $product->getMedia('gallery')->map(
-                fn($record) => $record->getUrl()
-            )->toArray() : new Optional()
+            $with_gallery ? $product->getMedia('gallery')->map(fn($row) => $row->getUrl())->toArray() : new Optional()
         );
     }
 }

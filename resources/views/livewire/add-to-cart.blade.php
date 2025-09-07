@@ -53,10 +53,11 @@
             </div>
         </button>
     </div>
-    <div class="my-2 flex flex-col gap-2">
-        <span class="text-sm">{{ $stock }} in stock</span>
+
+    <div>
+        <p class="text-sm mt-3">{{ $stock }} in stock</p>
         @error('quantity')
-            <span class="text-xs text-red-500">{{ $message }}</span>
+            <span class="text-red-500 text-xs">{{ $message }}</span>
         @enderror
     </div>
 </div>

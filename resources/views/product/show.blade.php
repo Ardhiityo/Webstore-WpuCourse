@@ -1,4 +1,4 @@
-<x-layouts.app title="Product Name">
+<x-layouts.app>
     <div class="container mx-auto max-w-[85rem] w-full px-4 sm:px-6 lg:px-8 py-10">
         <div class="grid grid-cols-1 gap-10 my-5 md:grid-cols-10">
             <div class="grid grid-cols-1 gap-2 md:col-span-7">
@@ -24,20 +24,19 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-2 my-5">
-                        <livewire:add-to-cart :product="$product" />
+                        <livewire:add-to-cart :product='$product'>
                     </div>
                 </div>
                 <div>
                     <h3 class="font-semibold">Description</h3>
                     <div class="my-2 prose text-gray-800 dark:text-neutral-200">
-                        {!! Str::markdown($product->description) !!}
+                        {!! $product->description !!}
                     </div>
                 </div>
             </div>
             <div class="md:col-span-10">
-                {{-- <x-product-sections :product="$product" title="You may also like" :url="route('product-catalog')" /> --}}
+                {{-- <x-product-sections title="You may also like" :url="route('product-catalog')" /> --}}
             </div>
-
         </div>
     </div>
 </x-layouts.app>

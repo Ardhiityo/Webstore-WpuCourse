@@ -13,16 +13,16 @@ class ProductCollectionData extends Data
         public int $id,
         public string $name,
         public string $slug,
-        public int $product_count
+        public int $products_count
     ) {}
 
     public static function fromModel(Tag $tag): self
     {
         return new self(
             $tag->id,
-            (string)$tag->name,
-            (string)$tag->slug,
-            (int)$tag->products_count
+            (string) $tag->name,
+            (string) $tag->slug,
+            $tag->products_count
         );
     }
 }

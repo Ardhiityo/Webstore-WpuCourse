@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
-use App\Data\CartData;
 use App\Data\CartItemData;
-use Illuminate\Support\Collection;
 use App\Contract\CartServiceInterface;
+use App\Data\CartData;
+use Illuminate\Support\Collection;
 use Spatie\LaravelData\DataCollection;
 
 class SessionCartService implements CartServiceInterface
 {
-    private string $session_key = 'cart';
+    protected string $session_key = 'session_cart';
 
     /**
      * Create a new class instance.
@@ -20,49 +22,49 @@ class SessionCartService implements CartServiceInterface
         //
     }
 
-    public function load(): DataCollection
+    public function load()
     {
         $raw = session()->get($this->session_key, []);
 
         return new DataCollection(CartItemData::class, $raw);
     }
 
-    public function save(Collection $item): void
+    public function save(Collection $item)
     {
-        session()->put($this->session_key, $item->toArray());
+        return session()->put($this->session_key, $item->values()->all());
     }
 
     public function addOrUpdate(CartItemData $item): void
     {
-        $current_carts = $this->load()->toCollection();
+        $updated = false;
 
-        $item_existing = false;
-
-        $new_carts = $current_carts->map(function (CartItemData $cart) use ($item, &$item_existing) {
-            if ($cart->sku === $item->sku) {
-                $item_existing = true;
+        $cart = $this->load()->toCollection()->map(function ($i) use ($item, &$updated) {
+            if ($i->sku === $item->sku) {
+                $updated = true;
                 return $item;
             }
-            return $cart;
+            return $i;
         })->values()->collect();
 
-        if (!$item_existing) {
-            $new_carts->push($item);
+        if (!$updated) {
+            $cart->push($item);
         }
 
-        $this->save($new_carts);
+        $this->save($cart);
     }
 
     public function getItemBySku(string $sku): CartItemData|null
     {
-        return $this->load()->toCollection()->first(fn(CartItemData $item) => $item->sku === $sku);
+        return $this->load()->toCollection()->first(fn($item) => $item->sku === $sku);
     }
 
     public function remove(string $sku): void
     {
-        $new_carts = $this->load()->toCollection()->reject(fn($item) => $item->sku === $sku);
+        $cart = $this->load()->toCollection()->reject(
+            fn($item) => $item->sku === $sku
+        )->values()->collect();
 
-        $this->save($new_carts);
+        $this->save($cart);
     }
 
     public function all(): CartData

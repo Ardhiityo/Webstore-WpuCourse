@@ -98,10 +98,9 @@
                 </div>
             </div>
             <div class="md:col-span-10">
-                {{-- <x-product-sections :product="$product" title="You may also like" :url="route('product-catalog')" /> --}}
+                <x-product-sections title="You may also like" :url="route('product-catalog')" />
             </div>
 
         </div>
     </div>
-
 </x-store-layout>
