@@ -43,7 +43,7 @@ class SessionCartService implements CartServiceInterface
                 $item_existing = true;
                 return $item;
             }
-            return $item;
+            return $cart;
         })->values()->collect();
 
         if (!$item_existing) {

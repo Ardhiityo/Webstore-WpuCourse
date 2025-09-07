@@ -20,6 +20,7 @@
                                       <p class="px-3 py-2 mt-1 text-xl font-semibold text-black dark:text-black">
                                           {{ $item->product()->price_formatted }}
                                       </p>
+                                      <livewire:remove-cart-item :product="$item->product()" />
                                   </div>
                               </div>
                           </div>
