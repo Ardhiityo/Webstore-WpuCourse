@@ -5,11 +5,13 @@ namespace App\Providers;
 use App\Models\User;
 use Illuminate\Support\Number;
 use App\Actions\ValidateCartStock;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Services\SessionCartService;
 use Illuminate\Support\Facades\Gate;
 use App\Contract\CartServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
@@ -29,6 +31,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        DB::listen(function (QueryExecuted $query) {
+            // Log::info($query->sql);
+        });
         Model::unguard();
         Number::useCurrency('IDR');
         Gate::define('is_stock_available', function (User $user = null): bool {

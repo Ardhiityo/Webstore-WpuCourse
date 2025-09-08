@@ -10,23 +10,36 @@
 
                    <div class="grid grid-cols-2 gap-3 mt-2">
                        <div class="col-span-2">
-                           <input id="af-payment-billing-contact" type="text"
-                               class="border-red-600 py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                           <input id="af-payment-billing-contact" type="text" wire:model='data.full_name'
+                               class="@error('data.full_name') border-red-600 @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                                placeholder="Full Name">
-                           <p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
-                               Customer Name Error Message</p>
+                           @error('data.full_name')
+                               <p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
+                                   {{ $message }}
+                               </p>
+                           @enderror
                        </div>
                        <div>
-                           <input type="text"
-                               class="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                           <input type="text" wire:model='data.email'
+                               class="py-1.5 sm:py-2 px-3 pe-11 @error('data.email') border-red-600
+                               @enderror block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                                placeholder="Email">
+                           @error('data.email')
+                               <p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
+                                   {{ $message }}
+                               </p>
+                           @enderror
                        </div>
                        <div>
-                           <input type="text"
-                               class="border-red-600 py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                           <input type="text" wire:model='data.phone'
+                               class="@error('data.phone') border-red-600
+                           @enderror py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                                placeholder="Phone Number">
-                           <p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
-                               Phone Error Message</p>
+                           @error('data.phone')
+                               <p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
+                                   {{ $message }}
+                               </p>
+                           @enderror
                        </div>
                    </div>
                </div>
@@ -38,11 +51,14 @@
                    </label>
 
                    <div class="mt-2 space-y-3">
-                       <input id="af-payment-billing-address" type="text"
-                           class="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                       <input id="af-payment-billing-address" type="text" wire:model='data.address_line'
+                           class="@error('data.address_line')border-red-600 @enderror  py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
                            placeholder="Street Address">
-                       <p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">Street Address Error
-                           Message</p>
+                       @error('data.address_line')
+                           <p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
+                               {{ $message }}
+                           </p>
+                       @enderror
                        <div>
                            <div x-data="{ open: false }" class="relative w-full">
                                <input type="text" @focus="open = true" @click.outside="open = false"
@@ -118,7 +134,8 @@
                                <input type="radio" name="hs-vertical-radio-in-form"
                                    class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                    id="payment_method_{{ $key }}">
-                               <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">{{ $item }}</span>
+                               <span
+                                   class="text-sm text-gray-500 ms-3 dark:text-neutral-400">{{ $item }}</span>
                            </label>
                        @endforeach
 
@@ -128,9 +145,9 @@
            <div class="p-10">
                <h1 class="mb-5 text-2xl font-light">Order Summary</h1>
                <div>
-                   @for ($i = 1; $i < 5; $i++)
-                       <x-single-product-list />
-                   @endfor
+                   @foreach ($this->cart->items as $item)
+                       <x-single-product-list :cart_item='$item' />
+                   @endforeach
                </div>
                <div class="grid gap-5">
                    <!-- List Group -->
@@ -139,7 +156,7 @@
                            class="inline-flex items-center px-4 py-3 -mt-px text-sm text-gray-800 border border-gray-200 gap-x-2 first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
                            <div class="flex items-center justify-between w-full">
                                <span>Sub Total</span>
-                               <span>Rp123,456</span>
+                               <span>{{ data_get($this->summaries, 'sub_total_formatted') }}</span>
                            </div>
                        </li>
                        <li
@@ -149,21 +166,26 @@
                                    <span>Shipping (JNT YES)</span>
                                    <span class="text-xs">570 gram</span>
                                </span>
-                               <span>Rp.123.123</span>
+                               <span>{{ data_get($this->summaries, 'shipping_total_formatted') }}</span>
                            </div>
                        </li>
                        <li
                            class="inline-flex items-center px-4 py-3 -mt-px text-sm font-semibold text-gray-800 border border-gray-200 gap-x-2 first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:bg-neutral-800 dark:border-neutral-700 dark:text-neutral-200">
                            <div class="flex items-center justify-between w-full">
                                <span>Total</span>
-                               <span>Rp123,456</span>
+                               <span>{{ data_get($this->summaries, 'grand_total_formatted') }}</span>
                            </div>
                        </li>
                    </ul>
                    <!-- End List Group -->
-                   <button type="button" onclick="window.location.href='/order-confirmed'"
+                   <button type="button" wire:click='placeAnOrder' wire:loading.attr='disabled'
                        class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg gap-x-2 hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
                        Place an Order
+                       <div wire:loading
+                           class="animate-spin inline-block size-4 border-3 border-current border-t-transparent text-white rounded-full dark:text-white"
+                           role="status" aria-label="loading">
+                           <span class="sr-only">Loading...</span>
+                       </div>
                    </button>
                </div>
            </div>
