@@ -4,9 +4,12 @@ namespace App\Livewire;
 
 use App\Data\CartData;
 use Livewire\Component;
+use App\Data\RegionData;
 use Illuminate\Support\Number;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use App\Contract\CartServiceInterface;
+use Spatie\LaravelData\DataCollection;
 
 class Checkout extends Component
 {
@@ -20,11 +23,17 @@ class Checkout extends Component
         'total_weight' => 0
     ];
 
+    public array $region_selector = [
+        'keyword' => null,
+        'region_selected' => null
+    ];
+
     public array $data = [
         'full_name' => null,
         'email' => null,
         'phone' => null,
         'address_line' => null,
+        'destination_region_code' => null
     ];
 
     public function rules(): array
@@ -34,6 +43,7 @@ class Checkout extends Component
             'data.email' => ['required', 'string', 'email:dns', 'min:3', 'max:25'],
             'data.phone' => ['required', 'integer', 'min:8', 'max:13'],
             'data.address_line' => ['required', 'string', 'min:8', 'max:255'],
+            'data.destination_region_code' => ['required', 'string', 'exists:regions,code'],
         ];
     }
 
@@ -56,6 +66,51 @@ class Checkout extends Component
         $this->validate();
 
         $this->calculateTotal();
+    }
+
+    public function updatedRegionSelectorRegionSelected($value)
+    {
+        data_set($this->data, 'destination_region_code', $value);
+    }
+
+    public function getRegionsProperty(): DataCollection
+    {
+        $data = [
+            [
+                'code' => 'b001',
+                'province' => 'jawa barat',
+                'city' => 'bandung',
+                'district' => 'cikutra barat',
+                'sub_district' => 'cikutra barat',
+                'postal_code' => 42411
+            ],
+            [
+                'code' => 'b002',
+                'province' => 'jawa barat',
+                'city' => 'bandung',
+                'district' => 'cikutra timur',
+                'sub_district' => 'cikutra timur',
+                'postal_code' => 42412
+            ]
+        ];
+
+        if (!data_get($this->region_selector, 'keyword')) {
+
+            $data = [];
+        }
+
+        return new DataCollection(RegionData::class, $data);
+    }
+
+    public function getRegionProperty(): ?RegionData
+    {
+        $region_selected = data_get($this->region_selector, 'region_selected');
+
+        if (!$region_selected) {
+            return null;
+        };
+
+        return $this->regions->toCollection()->first(fn(RegionData $region) => $region->code === $region_selected);
     }
 
     public function calculateTotal()

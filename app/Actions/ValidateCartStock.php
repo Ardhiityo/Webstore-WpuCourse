@@ -2,9 +2,10 @@
 
 namespace App\Actions;
 
+use Illuminate\Support\Facades\Log;
 use App\Contract\CartServiceInterface;
-use Illuminate\Validation\ValidationException;
 use Lorisleiva\Actions\Concerns\AsAction;
+use Illuminate\Validation\ValidationException;
 
 class ValidateCartStock
 {
@@ -16,9 +17,16 @@ class ValidateCartStock
     {
         $carts = $this->service->all()->items->toCollection();
 
+        if ($carts->isEmpty()) {
+            throw ValidationException::withMessages([
+                'cart' => 'The products in the cart is empty.',
+            ]);
+        }
+
         $insufficient = collect([]);
 
         foreach ($carts as $key => $cart) {
+            Log::info('1');
             $product = $cart->product();
             if (!$product || $cart->quantity > $product->stock) {
                 $insufficient->push([

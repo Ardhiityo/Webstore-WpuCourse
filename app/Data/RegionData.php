@@ -16,7 +16,7 @@ class RegionData extends Data
         public string $city,
         public string $district,
         public string $sub_district,
-        public string $postal_code,
+        public string|null $postal_code,
         public string $country = 'indonesia'
     ) {
         $this->label = "{$sub_district}, {$district}, {$city}, {$province}, {$postal_code}";
