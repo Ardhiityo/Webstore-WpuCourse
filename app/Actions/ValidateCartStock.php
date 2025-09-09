@@ -26,7 +26,6 @@ class ValidateCartStock
         $insufficient = collect([]);
 
         foreach ($carts as $key => $cart) {
-            Log::info('1');
             $product = $cart->product();
             if (!$product || $cart->quantity > $product->stock) {
                 $insufficient->push([

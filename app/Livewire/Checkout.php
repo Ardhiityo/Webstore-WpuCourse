@@ -9,6 +9,7 @@ use Illuminate\Support\Number;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use App\Contract\CartServiceInterface;
+use App\Services\RegionQueryService;
 use Spatie\LaravelData\DataCollection;
 
 class Checkout extends Component
@@ -52,7 +53,7 @@ class Checkout extends Component
         return $cart->all();
     }
 
-    public function mount(CartServiceInterface $carts)
+    public function mount()
     {
         if (Gate::denies('is_stock_available')) {
             return redirect()->route('cart');
@@ -61,7 +62,7 @@ class Checkout extends Component
         $this->calculateTotal();
     }
 
-    public function placeAnOrder(CartServiceInterface $carts)
+    public function placeAnOrder()
     {
         $this->validate();
 
@@ -73,36 +74,18 @@ class Checkout extends Component
         data_set($this->data, 'destination_region_code', $value);
     }
 
-    public function getRegionsProperty(): DataCollection
+    public function getRegionsProperty(RegionQueryService $query_service): DataCollection
     {
-        $data = [
-            [
-                'code' => 'b001',
-                'province' => 'jawa barat',
-                'city' => 'bandung',
-                'district' => 'cikutra barat',
-                'sub_district' => 'cikutra barat',
-                'postal_code' => 42411
-            ],
-            [
-                'code' => 'b002',
-                'province' => 'jawa barat',
-                'city' => 'bandung',
-                'district' => 'cikutra timur',
-                'sub_district' => 'cikutra timur',
-                'postal_code' => 42412
-            ]
-        ];
+        $keyword = data_get($this->region_selector, 'keyword');
 
-        if (!data_get($this->region_selector, 'keyword')) {
-
-            $data = [];
+        if (!$keyword) {
+            return new DataCollection(RegionData::class, []);
         }
 
-        return new DataCollection(RegionData::class, $data);
+        return $query_service->searchRegionByName($keyword);
     }
 
-    public function getRegionProperty(): ?RegionData
+    public function getRegionProperty(RegionQueryService $query_service): ?RegionData
     {
         $region_selected = data_get($this->region_selector, 'region_selected');
 
@@ -110,7 +93,7 @@ class Checkout extends Component
             return null;
         };
 
-        return $this->regions->toCollection()->first(fn(RegionData $region) => $region->code === $region_selected);
+        return $query_service->searchRegionByCode($region_selected);
     }
 
     public function calculateTotal()

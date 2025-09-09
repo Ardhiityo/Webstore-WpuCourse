@@ -60,11 +60,19 @@
                            </p>
                        @enderror
                        <div>
-                           <div x-data="{ open: false }" class="relative w-full">
-                               <input type="text" @focus="open = true" @click.outside="open = false"
-                                   class="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
-                                   placeholder="Cari Lokasi" wire:model.live.debounce.500ms='region_selector.keyword'>
 
+                           <div x-data="{ open: false }" class="relative w-full">
+                               <div class="relative">
+                                   <input type="text" @focus="open = true" @click.outside="open = false"
+                                       class="py-1.5 sm:py-2 px-3 pe-11 block w-full border-gray-200 shadow-2xs sm:text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400 dark:placeholder-neutral-500 dark:focus:ring-neutral-600"
+                                       placeholder="Cari Lokasi"
+                                       wire:model.live.debounce.500ms='region_selector.keyword'>
+                                   <div wire:loading wire:target='region_selector.keyword'
+                                       class="animate-spin inline-block size-4 border-3 border-current border-t-transparent text-blue-500 rounded-full dark:text-blue-500 absolute top-3 right-3"
+                                       role="status" aria-label="loading">
+                                       <span class="sr-only">Loading...</span>
+                                   </div>
+                               </div>
                                @if ($this->regions->toCollection()->isNotEmpty())
                                    <ul class="absolute z-10 w-full mt-1 overflow-y-auto bg-white border border-gray-200 rounded-b-lg max-h-60"
                                        x-show="open">
