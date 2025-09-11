@@ -9,7 +9,9 @@ use Illuminate\Support\Number;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use App\Contract\CartServiceInterface;
+use App\Data\ShippingData;
 use App\Services\RegionQueryService;
+use App\Services\ShippingMethodService;
 use Spatie\LaravelData\DataCollection;
 
 class Checkout extends Component
@@ -48,11 +50,6 @@ class Checkout extends Component
         ];
     }
 
-    public function getCartProperty(CartServiceInterface $cart): CartData
-    {
-        return $cart->all();
-    }
-
     public function mount()
     {
         if (Gate::denies('is_stock_available')) {
@@ -62,16 +59,9 @@ class Checkout extends Component
         $this->calculateTotal();
     }
 
-    public function placeAnOrder()
+    public function getCartProperty(CartServiceInterface $cart): CartData
     {
-        $this->validate();
-
-        $this->calculateTotal();
-    }
-
-    public function updatedRegionSelectorRegionSelected($value)
-    {
-        data_set($this->data, 'destination_region_code', $value);
+        return $cart->all();
     }
 
     public function getRegionsProperty(RegionQueryService $query_service): DataCollection
@@ -94,6 +84,37 @@ class Checkout extends Component
         };
 
         return $query_service->searchRegionByCode($region_selected);
+    }
+
+    /**
+     * Summary of getShippingMethodsProperty
+     * @return DataCollection<ShippingData>
+     */
+    public function getShippingMethodsProperty(RegionQueryService $region_query, ShippingMethodService $shipping_service): DataCollection
+    {
+        if (!data_get($this->data, 'destination_region_code')) {
+            return new DataCollection(ShippingData::class, []);
+        }
+
+        $origin_code = config('shipping.shipping_origin_code');
+
+        return $shipping_service->getShippingMethods(
+            $region_query->searchRegionByCode($origin_code),
+            $region_query->searchRegionByCode(data_get($this->data, 'destination_region_code')),
+            $this->cart
+        );
+    }
+
+    public function updatedRegionSelectorRegionSelected($value)
+    {
+        data_set($this->data, 'destination_region_code', $value);
+    }
+
+    public function placeAnOrder()
+    {
+        $this->validate();
+
+        dd($this->data);
     }
 
     public function calculateTotal()

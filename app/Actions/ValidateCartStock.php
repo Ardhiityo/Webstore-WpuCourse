@@ -2,10 +2,9 @@
 
 namespace App\Actions;
 
-use Illuminate\Support\Facades\Log;
 use App\Contract\CartServiceInterface;
-use Lorisleiva\Actions\Concerns\AsAction;
 use Illuminate\Validation\ValidationException;
+use Lorisleiva\Actions\Concerns\AsAction;
 
 class ValidateCartStock
 {

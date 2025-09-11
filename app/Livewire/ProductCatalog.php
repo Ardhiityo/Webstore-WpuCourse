@@ -8,6 +8,8 @@ use Livewire\Component;
 use App\Data\ProductData;
 use Livewire\WithPagination;
 use App\Data\ProductCollectionData;
+use App\Data\ShippingServiceData;
+use Spatie\LaravelData\DataCollection;
 
 class ProductCatalog extends Component
 {
