@@ -81,7 +81,7 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
+                    ->money('IDR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('stock')
                     ->numeric()
