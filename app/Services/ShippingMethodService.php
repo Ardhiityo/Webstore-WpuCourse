@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\LaravelData\DataCollection;
 use App\Contract\ShippingDriverInterface;
 use App\Drivers\Shipping\OfflineShippingDriver;
+use Illuminate\Support\Facades\Cache;
 
 class ShippingMethodService
 {
@@ -64,6 +65,12 @@ class ShippingMethodService
                     return;
                 }
 
+                Cache::put(
+                    "shipping_hash:{$shipping_data->hash}",
+                    $shipping_data,
+                    now()->addMinutes(15)
+                );
+
                 return $shipping_data;
             })
             ->reject(
@@ -72,5 +79,10 @@ class ShippingMethodService
             ->pipe(
                 fn($items) => ShippingData::collect($items, DataCollection::class)
             );
+    }
+
+    public function getShippingMethod(string $hash)
+    {
+        return Cache::get("shipping_hash:{$hash}");
     }
 }

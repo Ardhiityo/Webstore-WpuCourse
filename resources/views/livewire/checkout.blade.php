@@ -127,7 +127,7 @@
                                    class="flex items-center justify-between w-full gap-2 p-2 text-sm bg-white border border-gray-200 rounded-lg focus:border-blue-500 focus:ring-blue-500 dark:bg-neutral-900 dark:border-neutral-700 dark:text-neutral-400">
                                    <div class="flex items-center justify-start gap-2">
                                        <input type="radio" value="{{ $shipping_method->hash }}"
-                                           wire:model.live='shipping_selector_shipping_method'
+                                           wire:model.live='shipping_selector.shipping_method'
                                            class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                            id="shipping_method_{{ $shipping_method->hash }}">
                                        @if ($shipping_method->logo_url)
@@ -197,10 +197,15 @@
                            class="inline-flex items-center px-4 py-3 -mt-px text-sm text-gray-800 border border-gray-200 gap-x-2 first:rounded-t-lg first:mt-0 last:rounded-b-lg dark:border-neutral-700 dark:text-neutral-200">
                            <div class="flex items-center justify-between w-full">
                                <span class="flex flex-col">
-                                   <span>Shipping (JNT YES)</span>
-                                   <span class="text-xs">570 gram</span>
+                                   <span>{{ $this->shipping_method?->label ?? '-' }}</span>
+                                   <span class="text-xs">{{ $this->shipping_method?->weight ?? 0 }} gram</span>
                                </span>
-                               <span>{{ data_get($this->summaries, 'shipping_total_formatted') }}</span>
+                               <span wire:loading.class='sr-only' wire:target='shipping_selector.shipping_method'
+                                   wire:>{{ $this->shipping_method?->cost_formatted ?? '-' }}</span>
+                               <div wire:loading wire:target='shipping_selector.shipping_method'
+                                   class="animate-spin inline-block size-4 border-3 border-current border-t-transparent text-blue-500 rounded-full dark:text-blue-500"
+                                   role="status" aria-label="loading">
+                               </div>
                            </div>
                        </li>
                        <li
@@ -218,7 +223,6 @@
                        <div wire:loading
                            class="animate-spin inline-block size-4 border-3 border-current border-t-transparent text-white rounded-full dark:text-white"
                            role="status" aria-label="loading">
-                           <span class="sr-only">Loading...</span>
                        </div>
                    </button>
                </div>

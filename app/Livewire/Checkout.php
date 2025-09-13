@@ -24,7 +24,7 @@ class Checkout extends Component
         'shipping_total_formatted' => '-',
         'grand_total' => 0,
         'grand_total_formatted' => '-',
-        'total_weight' => 0
+        'total_weight' => 0,
     ];
 
     public array $region_selector = [
@@ -33,7 +33,7 @@ class Checkout extends Component
     ];
 
     public array $shipping_selector = [
-        'shipping_method' => null
+        'shipping_method' => null,
     ];
 
     public array $data = [
@@ -41,7 +41,8 @@ class Checkout extends Component
         'email' => null,
         'phone' => null,
         'address_line' => null,
-        'destination_region_code' => null
+        'destination_region_code' => null,
+        'shipping_hash' => null
     ];
 
     public function rules(): array
@@ -52,6 +53,7 @@ class Checkout extends Component
             'data.phone' => ['required', 'integer', 'min:8', 'max:13'],
             'data.address_line' => ['required', 'string', 'min:8', 'max:255'],
             'data.destination_region_code' => ['required', 'string', 'exists:regions,code'],
+            'data.shipping_hash' => ['required', 'string']
         ];
     }
 
@@ -115,10 +117,37 @@ class Checkout extends Component
         data_set($this->data, 'destination_region_code', $value);
     }
 
+    public function updatedShippingSelectorShippingMethod($value)
+    {
+        data_set($this->data, 'shipping_hash', $value);
+
+        $this->calculateTotal();
+    }
+
+    public function getShippingMethodProperty(ShippingMethodService $query_service)
+    {
+        $region_selected = data_get($this->region_selector, 'region_selected');
+        $shipping_method = data_get($this->shipping_selector, 'shipping_method');
+
+        if (!$region_selected || !$shipping_method) {
+            return null;
+        }
+
+        $data = $query_service->getShippingMethod($shipping_method);
+
+        if (!$data) {
+            $this->addError('shipping_hash', 'Ups, transaction timeout');
+            return redirect()->route('checkout');
+        }
+
+        return $data;
+    }
+
     public function placeAnOrder()
     {
         $this->validate();
     }
+
 
     public function calculateTotal()
     {
@@ -127,7 +156,7 @@ class Checkout extends Component
         data_set($this->summaries, 'sub_total', $cart->total);
         data_set($this->summaries, 'sub_total_formatted', $cart->total_formatted);
 
-        $shipping_cost = 0;
+        $shipping_cost = $this->shipping_method?->cost ?? 0;
         data_set($this->summaries, 'shipping_total', $shipping_cost);
 
         $shipping_total_formatted = Number::currency($shipping_cost);
