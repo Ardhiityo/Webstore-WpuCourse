@@ -33,7 +33,7 @@ class Checkout extends Component
     ];
 
     public array $shipping_selector = [
-        'shipping_selected' => null
+        'shipping_method' => null
     ];
 
     public array $data = [
