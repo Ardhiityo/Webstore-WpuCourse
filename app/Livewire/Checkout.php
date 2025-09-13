@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Data\CartData;
+use App\Rules\ValidShippingHash;
 use Livewire\Component;
 use App\Data\RegionData;
 use Illuminate\Support\Number;
@@ -50,10 +51,10 @@ class Checkout extends Component
         return [
             'data.full_name' => ['required', 'string', 'min:3', 'max:25'],
             'data.email' => ['required', 'string', 'email:dns', 'min:3', 'max:25'],
-            'data.phone' => ['required', 'integer', 'min:8', 'max:13'],
+            'data.phone' => ['required', 'min:8', 'max:13'],
             'data.address_line' => ['required', 'string', 'min:8', 'max:255'],
             'data.destination_region_code' => ['required', 'string', 'exists:regions,code'],
-            'data.shipping_hash' => ['required', 'string']
+            'data.shipping_hash' => ['required', 'string', new ValidShippingHash()]
         ];
     }
 

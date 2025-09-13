@@ -16,6 +16,12 @@ class ValidateCartStock
     {
         $carts = $this->service->all()->items->toCollection();
 
+        if ($carts->isEmpty()) {
+            throw ValidationException::withMessages([
+                'cart' => 'The products in the cart is empty.',
+            ]);
+        }
+
         $insufficient = collect([]);
 
         foreach ($carts as $key => $cart) {

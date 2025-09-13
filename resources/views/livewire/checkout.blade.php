@@ -7,7 +7,6 @@
                    <label for="af-payment-billing-contact" class="inline-block text-sm font-medium dark:text-white">
                        Billing contact
                    </label>
-
                    <div class="grid grid-cols-2 gap-3 mt-2">
                        <div class="col-span-2">
                            <input id="af-payment-billing-contact" type="text" wire:model='data.full_name'
@@ -60,7 +59,6 @@
                            </p>
                        @enderror
                        <div>
-
                            <div x-data="{ open: false }" class="relative w-full">
                                <div class="relative">
                                    <input type="text" @focus="open = true" @click.outside="open = false"
@@ -109,7 +107,11 @@
                <label for="af-shipping-method" class="inline-block text-sm font-medium dark:text-white">
                    Shipping Method
                </label>
-
+               @error('data.shipping_hash')
+                   <p class="mt-2 text-xs text-red-600" id="hs-validation-name-error-helper">
+                       {{ $message }}
+                   </p>
+               @enderror
                <div class="mt-2 space-y-3">
                    <div class="flex justify-center">
                        <div class="animate-spin size-6 border-3 border-current border-t-transparent text-blue-500 rounded-full dark:text-blue-500"
@@ -176,6 +178,7 @@
                    </div>
                </div>
            </div>
+
            <div class="p-10">
                <h1 class="mb-5 text-2xl font-light">Order Summary</h1>
                <div>
@@ -200,8 +203,9 @@
                                    <span>{{ $this->shipping_method?->label ?? '-' }}</span>
                                    <span class="text-xs">{{ $this->shipping_method?->weight ?? 0 }} gram</span>
                                </span>
-                               <span wire:loading.class='sr-only' wire:target='shipping_selector.shipping_method'
-                                   wire:>{{ $this->shipping_method?->cost_formatted ?? '-' }}</span>
+                               <span wire:loading.class='sr-only' wire:target='shipping_selector.shipping_method'>
+                                   {{ $this->shipping_method?->cost_formatted ?? '-' }}
+                               </span>
                                <div wire:loading wire:target='shipping_selector.shipping_method'
                                    class="animate-spin inline-block size-4 border-3 border-current border-t-transparent text-blue-500 rounded-full dark:text-blue-500"
                                    role="status" aria-label="loading">
