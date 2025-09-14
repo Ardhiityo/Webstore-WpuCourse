@@ -11,6 +11,8 @@ use Illuminate\Support\Number;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use App\Contract\CartServiceInterface;
+use App\Data\CheckoutData;
+use App\Data\CustomerData;
 use App\Data\ShippingData;
 use App\Services\PaymentMethodQueryService;
 use App\Services\RegionQueryService;
@@ -164,9 +166,26 @@ class Checkout extends Component
 
     public function placeAnOrder()
     {
-        $this->validate();
-    }
+        $validated = $this->validate();
 
+        $shipping_hash = data_get($validated, 'data.shipping_hash');
+        $shipping_method = app(ShippingMethodService::class)->getShippingMethod($shipping_hash);
+
+        $payment_method_hash = data_get($validated, 'data.payment_method_hash');
+        $payment = app(PaymentMethodQueryService::class)->getPaymentMethodByHash($payment_method_hash);
+
+        $checkout = CheckoutData::from([
+            'customer' => CustomerData::from(data_get($validated, 'data')),
+            'address_line' => data_get($validated, 'data.address_line'),
+            'origin' => $shipping_method->origin,
+            'destination' => $shipping_method->destination,
+            'cart' => $this->cart,
+            'payment' => $payment,
+            'shipping' => $shipping_method
+        ]);
+
+        dd($checkout);
+    }
 
     public function calculateTotal()
     {

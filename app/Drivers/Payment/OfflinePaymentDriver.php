@@ -30,7 +30,7 @@ class OfflinePaymentDriver implements PaymentDriverInterface
             PaymentData::from([
                 'driver' => $this->driver,
                 'method' => 'bca-bank-transfer',
-                'label' => 'Bca Transfer BCA',
+                'label' => 'Bank Transfer BCA',
                 'payload' => [
                     'account_number' => '1234',
                     'account_hold_name' => 'Rezza Kurniawan'
