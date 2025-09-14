@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Data\CartData;
+use App\Rules\ValidPaymentMethodHash;
 use App\Rules\ValidShippingHash;
 use Livewire\Component;
 use App\Data\RegionData;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use App\Contract\CartServiceInterface;
 use App\Data\ShippingData;
+use App\Services\PaymentMethodQueryService;
 use App\Services\RegionQueryService;
 use App\Services\ShippingMethodService;
 use Illuminate\Support\Collection;
@@ -37,13 +39,18 @@ class Checkout extends Component
         'shipping_method' => null,
     ];
 
+    public array $payment_method_selector = [
+        'payment_method_selected' => null
+    ];
+
     public array $data = [
         'full_name' => null,
         'email' => null,
         'phone' => null,
         'address_line' => null,
         'destination_region_code' => null,
-        'shipping_hash' => null
+        'shipping_hash' => null,
+        'payment_method_hash' => null
     ];
 
     public function rules(): array
@@ -54,7 +61,8 @@ class Checkout extends Component
             'data.phone' => ['required', 'min:8', 'max:13'],
             'data.address_line' => ['required', 'string', 'min:8', 'max:255'],
             'data.destination_region_code' => ['required', 'string', 'exists:regions,code'],
-            'data.shipping_hash' => ['required', 'string', new ValidShippingHash()]
+            'data.shipping_hash' => ['required', 'string', new ValidShippingHash()],
+            'data.payment_method_hash' => ['required', new ValidPaymentMethodHash()]
         ];
     }
 
@@ -111,6 +119,16 @@ class Checkout extends Component
             $region_query->searchRegionByCode(data_get($this->data, 'destination_region_code')),
             $this->cart
         )->toCollection()->groupBy('service');
+    }
+
+    public function getPaymentMethodsProperty(PaymentMethodQueryService $query_service): Collection
+    {
+        return $query_service->getPaymentMethods()->toCollection();
+    }
+
+    public function updatedPaymentMethodSelectorPaymentMethodSelected($value)
+    {
+        data_set($this->data, 'payment_method_hash', $value);
     }
 
     public function updatedRegionSelectorRegionSelected($value)

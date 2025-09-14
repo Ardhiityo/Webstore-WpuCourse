@@ -15,6 +15,6 @@ interface PaymentDriverInterface
      */
     public function getMethods(): DataCollection;
     public function process($sales_order);
-    public function shouldPayButton(): bool;
-    public function getRedirectUrl(): ?string;
+    public function shouldPayButton($sales_order): bool;
+    public function getRedirectUrl($sales_order): ?string;
 }
