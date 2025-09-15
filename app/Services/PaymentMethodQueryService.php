@@ -6,6 +6,8 @@ namespace App\Services;
 
 use App\Contract\PaymentDriverInterface;
 use App\Data\PaymentData;
+use App\Data\SalesOrderData;
+use App\Data\SalesPaymentData;
 use Illuminate\Support\Facades\Log;
 use Spatie\LaravelData\DataCollection;
 use App\Drivers\Payment\OfflinePaymentDriver;
@@ -24,7 +26,7 @@ class PaymentMethodQueryService
         ];
     }
 
-    public function getDriver(PaymentData $paymentData): PaymentDriverInterface
+    public function getDriver(PaymentData|SalesPaymentData $paymentData): PaymentDriverInterface
     {
         return collect($this->drivers)
             ->first(fn(PaymentDriverInterface $driver) => $driver->driver === $paymentData->driver);
@@ -55,14 +57,14 @@ class PaymentMethodQueryService
     public function shouldShowButton($sales_order)
     {
         return $this->getDriver(
-            $sales_order->payment_driver
-        )->shouldPayButton($sales_order);
+            $sales_order->payment
+        )->shouldShowPayButton($sales_order);
     }
 
-    public function getRedirectUrl($sales_order): ?string
+    public function getRedirectUrl(SalesOrderData $sales_order): ?string
     {
         return $this->getDriver(
-            $sales_order->payment->driver
+            $sales_order->payment
         )->getRedirectUrl($sales_order);
     }
 }
