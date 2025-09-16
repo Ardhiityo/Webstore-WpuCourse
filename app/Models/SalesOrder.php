@@ -12,11 +12,11 @@ class SalesOrder extends Model
     use HasStates;
 
     protected $with = [
-        'status' => SalesOrderState::class,
         'items'
     ];
 
     protected $casts = [
+        'status' => SalesOrderState::class,
         'payment_payload' => 'json'
     ];
 

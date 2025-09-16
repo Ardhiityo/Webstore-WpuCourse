@@ -12,6 +12,7 @@ use App\Models\SalesOrder;
 use Spatie\LaravelData\DataCollection;
 use Spatie\LaravelData\Attributes\Computed;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\ModelStates\State;
 
 class SalesOrderData extends Data
 {
@@ -28,7 +29,7 @@ class SalesOrderData extends Data
 
     public function __construct(
         public string $trx_id,
-        public string $status,
+        public State $status,
         public CustomerData $customer,
         public string $address_line,
         public RegionData $origin,
@@ -98,7 +99,7 @@ class SalesOrderData extends Data
             $sales_order->shipping_total,
             $sales_order->sub_total,
             $sales_order->total,
-            $sales_order->due_date_at,
+            Carbon::parse($sales_order->due_date_at),
             $sales_order->created_at
         );
     }
