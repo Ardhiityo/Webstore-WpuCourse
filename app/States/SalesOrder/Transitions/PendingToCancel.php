@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace App\States\SalesOrder\Transitions;
+
 use App\Models\SalesOrder;
 use App\States\SalesOrder\Cancel;
 use Spatie\ModelStates\Transition;

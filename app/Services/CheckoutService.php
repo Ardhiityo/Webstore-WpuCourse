@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Data\CartItemData;
+use App\Events\SalesOrderCreated;
 use Carbon\Carbon;
 use App\Data\CheckoutData;
 use Exception;
@@ -98,6 +99,10 @@ class CheckoutService
             return $sales_order;
         });
 
-        return SalesOrderData::fromModel($sales_order);
+        $data = SalesOrderData::fromModel($sales_order);
+
+        event(new SalesOrderCreated($data));
+
+        return $data;
     }
 }

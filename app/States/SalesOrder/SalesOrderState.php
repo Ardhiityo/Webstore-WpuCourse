@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\States\SalesOrder;
 
-use App\States\SalesOrder\Transitions\PendingToProgress;
-use PendingToCancel;
-use ProgressToCompleted;
 use Spatie\ModelStates\State;
 use Spatie\ModelStates\StateConfig;
+use App\States\SalesOrder\Transitions\PendingToCancel;
+use App\States\SalesOrder\Transitions\PendingToProgress;
+use App\States\SalesOrder\Transitions\ProgressToCompleted;
 
 abstract class SalesOrderState extends State
 {
