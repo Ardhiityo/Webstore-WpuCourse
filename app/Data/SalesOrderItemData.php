@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
 use Spatie\LaravelData\Data;
@@ -12,7 +14,7 @@ class SalesOrderItemData extends Data
 
     public function __construct(
         public string $name,
-        public string $shot_desc,
+        public string $short_desc,
         public string $sku,
         public string $slug,
         public string|null $description,

@@ -8,6 +8,7 @@ use App\Data\CartItemData;
 use App\Contract\CartServiceInterface;
 use App\Data\CartData;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Session;
 use Spatie\LaravelData\DataCollection;
 
 class SessionCartService implements CartServiceInterface
@@ -70,5 +71,10 @@ class SessionCartService implements CartServiceInterface
     public function all(): CartData
     {
         return new CartData($this->load());
+    }
+
+    public function clear(): void
+    {
+        Session::forget($this->session_key);
     }
 }

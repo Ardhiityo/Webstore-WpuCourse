@@ -155,7 +155,7 @@
                                 class="hs-accordion-content w-full overflow-hidden transition-[height] duration-300"
                                 role="region" aria-labelledby="hs-basic-with-title-and-arrow-stretched-heading-one">
                                 @for ($i = 0; $i <= 5; $i++)
-                                    <x-single-product-list />
+                                    {{-- <x-single-product-list /> --}}
                                 @endfor
                             </div>
 

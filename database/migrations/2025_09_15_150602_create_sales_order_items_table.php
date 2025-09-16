@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('short_desc');
             $table->string('sku');
             $table->string('slug');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('cover_url');
             $table->integer('quantity');
             $table->double('price', 11, 2);

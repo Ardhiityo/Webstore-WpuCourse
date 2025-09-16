@@ -14,6 +14,7 @@ use App\Contract\CartServiceInterface;
 use App\Data\CheckoutData;
 use App\Data\CustomerData;
 use App\Data\ShippingData;
+use App\Services\CheckoutService;
 use App\Services\PaymentMethodQueryService;
 use App\Services\RegionQueryService;
 use App\Services\ShippingMethodService;
@@ -164,8 +165,9 @@ class Checkout extends Component
         return $data;
     }
 
-    public function placeAnOrder()
-    {
+    public function placeAnOrder(
+        CartServiceInterface $cart
+    ) {
         $validated = $this->validate();
 
         $shipping_hash = data_get($validated, 'data.shipping_hash');
@@ -184,7 +186,13 @@ class Checkout extends Component
             'shipping' => $shipping_method
         ]);
 
-        dd($checkout);
+        $service = app(CheckoutService::class);
+
+        $sales_order = $service->makeAnOrder($checkout);
+
+        $cart->clear();
+
+        return redirect()->route('order-confirmed', $sales_order->trx_id);
     }
 
     public function calculateTotal()
