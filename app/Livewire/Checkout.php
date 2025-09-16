@@ -56,7 +56,7 @@ class Checkout extends Component
         'payment_method_hash' => null
     ];
 
-    public function rules(): array
+    protected function rules(): array
     {
         return [
             'data.full_name' => ['required', 'string', 'min:3', 'max:25'],
@@ -66,6 +66,19 @@ class Checkout extends Component
             'data.destination_region_code' => ['required', 'string', 'exists:regions,code'],
             'data.shipping_hash' => ['required', 'string', new ValidShippingHash()],
             'data.payment_method_hash' => ['required', new ValidPaymentMethodHash()]
+        ];
+    }
+
+    protected function validationAttributes(): array
+    {
+        return [
+            'data.full_name' => 'Name',
+            'data.email' => 'Email',
+            'data.phone' => 'Phone',
+            'data.address_line' => 'Address',
+            'data.destination_region_code' => 'Region',
+            'data.shipping_hash' => 'Shipping Method',
+            'data.payment_method_hash' => 'Payment Method'
         ];
     }
 

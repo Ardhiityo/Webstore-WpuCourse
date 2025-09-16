@@ -16,14 +16,14 @@ class ProductCatalog extends Component
     use WithPagination;
 
     public string $search = '';
-    public $select_collection = [];
+    public $select_collections = [];
     public string $sort_by = 'latest';
 
     protected function queryString()
     {
         return [
             'search' => ['except' => ''],
-            'select_collection' => ['except' => []],
+            'select_collections' => ['except' => []],
             'sort_by' => ['except' => 'latest'],
         ];
     }
@@ -50,9 +50,17 @@ class ProductCatalog extends Component
     {
         return [
             'search' => ['nullable', 'min:3', 'max:20'],
-            'select_collection' => ['array'],
-            'select_collection.*' => ['int', 'exists:tags,id'],
+            'select_collections' => ['array'],
+            'select_collections.*' => ['int', 'exists:tags,id'],
             'sort_by' => ['in:latest,oldest,price_asc,price_desc']
+        ];
+    }
+
+    protected function validationAttributes(): array
+    {
+        return [
+            'select_collections' => 'Collection',
+            'sort_by' => 'Sort By'
         ];
     }
 
@@ -71,10 +79,10 @@ class ProductCatalog extends Component
             $query->whereLike('name', "%{$this->search}%");
         }
 
-        if (!empty($this->select_collection)) {
+        if (!empty($this->select_collections)) {
             $query->whereHas(
                 'tags',
-                fn($q) => $q->whereIn('id', $this->select_collection)
+                fn($q) => $q->whereIn('id', $this->select_collections)
             );
         }
 

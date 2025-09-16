@@ -18,7 +18,7 @@
                         @foreach ($collections as $i => $item)
                             <div class="flex items-center justify-between">
                                 <div class="flex">
-                                    <input type="checkbox" wire:model='select_collection' value="{{ $item->id }}"
+                                    <input type="checkbox" wire:model='select_collections' value="{{ $item->id }}"
                                         class="shrink-0 mt-0.5 border-gray-200 rounded-sm text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                         id="hs-default-checkbox-{{ $i }}">
                                     <label for="hs-default-checkbox-{{ $i }}"
@@ -29,12 +29,12 @@
                                 <span class="text-xs text-gray-800 font-loght">{{ $item->products_count }}</span>
                             </div>
                         @endforeach
-                        @error('select_collection.*')
+                        @error('select_collections.*')
                             <div>
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             </div>
                         @enderror
-                        @error('select_collection')
+                        @error('select_collections')
                             <div>
                                 <span class="text-xs text-red-500">{{ $message }}</span>
                             </div>
