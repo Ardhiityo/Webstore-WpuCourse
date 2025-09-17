@@ -3,6 +3,7 @@
 use App\Livewire\Cart;
 use App\Livewire\Checkout;
 use App\Livewire\HomePage;
+use App\Mail\ShippingReceiptNumberUpdatedMail;
 use App\Models\SalesOrder;
 use App\Data\SalesOrderData;
 use App\Livewire\ProductCatalog;
@@ -22,5 +23,7 @@ Route::view('/page', 'pages.page')->name('page');
 
 Route::get('/mailable', function () {
     $sales_order_data = SalesOrderData::fromModel(SalesOrder::first());
-    new SalesOrderService()->updateShippingReceipt($sales_order_data, '123');
+    // new SalesOrderService()->updateShippingReceipt($sales_order_data, '123');
+
+    return new ShippingReceiptNumberUpdatedMail($sales_order_data);
 });

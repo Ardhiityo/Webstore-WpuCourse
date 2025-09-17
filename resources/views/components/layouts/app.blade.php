@@ -22,6 +22,7 @@
     {{ $slot }}
 
     <x-footer />
+    <x-toast />
 </body>
 
 </html>
