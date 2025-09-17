@@ -12,7 +12,6 @@ use App\Data\SalesOrderData;
 use App\Models\Product;
 use App\Models\SalesOrder;
 use App\States\SalesOrder\Pending;
-use App\States\SalesOrder\SalesOrderState;
 use Illuminate\Support\Facades\DB;
 
 class CheckoutService
