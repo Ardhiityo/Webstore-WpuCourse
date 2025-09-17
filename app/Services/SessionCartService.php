@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Data\CartItemData;
-use App\Contract\CartServiceInterface;
 use App\Data\CartData;
+use App\Data\CartItemData;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Session;
+use App\Contract\CartServiceInterface;
 use Spatie\LaravelData\DataCollection;
+use Illuminate\Support\Facades\Session;
 
 class SessionCartService implements CartServiceInterface
 {

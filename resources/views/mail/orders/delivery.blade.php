@@ -7,11 +7,11 @@ Pesanan Anda dengan nomor **#{{ $sales_order->trx_id }}** telah dikirim dan seda
 
 ## 📦 Informasi Pengiriman
 
-- **Nomor Resi:** {{ $sales_order->shipping->receipt_number ?? 'Belum tersedia' }}
-- **Kurir:** {{ $sales_order->shipping->courier }}
-- **Layanan:** {{ $sales_order->shipping->service }}
-- **Estimasi Tiba:** {{ $sales_order->shipping->estimated_delivery }}
-- **Berat Paket:** {{ $sales_order->shipping->weight }} gram
+- **Nomor Resi:** {{ $sales_order->receipt_number ?? 'Belum tersedia' }}
+- **Kurir:** {{ $sales_order->courier }}
+- **Layanan:** {{ $sales_order->service }}
+- **Estimasi Tiba:** {{ $sales_order->estimated_delivery }}
+- **Berat Paket:** {{ $sales_order->weight }} gram
 - **Biaya Pengiriman:** {{ $sales_order->shipping_total_formatted }}
 
 ---
