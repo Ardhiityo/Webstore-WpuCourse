@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
+use Filament\Forms\Components\Select;
 
 class UserResource extends Resource
 {
@@ -37,6 +38,11 @@ class UserResource extends Resource
                     ->email()
                     ->maxLength(255)
                     ->inlineLabel(),
+                Select::make('roles')
+                    ->required()
+                    ->multiple()
+                    ->preload()
+                    ->relationship('roles', 'name'),
                 Fieldset::make('password')
                     ->schema([
                         TextInput::make('password')
