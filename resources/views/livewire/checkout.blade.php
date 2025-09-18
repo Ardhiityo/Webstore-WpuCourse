@@ -133,7 +133,7 @@
                                            class="shrink-0 mt-0.5 border-gray-200 rounded-full text-blue-600 focus:ring-blue-500 checked:border-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
                                            id="shipping_method_{{ $shipping_method->hash }}">
                                        @if ($shipping_method->logo_url)
-                                           <img src="{{ $shipping_method->url }}" class="h-5" />
+                                           <img src="{{ $shipping_method->logo_url }}" class="h-5" />
                                        @endif
                                        <span class="text-sm text-gray-500 ms-3 dark:text-neutral-400">
                                            <span class="text-gray-500"> {{ $shipping_method->label }}</span>
