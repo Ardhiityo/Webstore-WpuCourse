@@ -2,10 +2,11 @@
 
 namespace App\Livewire;
 
-use App\Data\SalesOrderData;
-use App\Models\SalesOrder;
-use App\Services\PaymentMethodQueryService;
 use Livewire\Component;
+use App\Models\SalesOrder;
+use App\Data\SalesOrderData;
+use Illuminate\Support\Facades\Log;
+use App\Services\PaymentMethodQueryService;
 
 class SalesOrderDetail extends Component
 {

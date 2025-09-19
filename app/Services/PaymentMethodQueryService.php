@@ -8,6 +8,7 @@ use App\Contract\PaymentDriverInterface;
 use App\Data\PaymentData;
 use App\Data\SalesOrderData;
 use App\Data\SalesPaymentData;
+use App\Drivers\Payment\MootaPaymentDriver;
 use Illuminate\Support\Facades\Log;
 use Spatie\LaravelData\DataCollection;
 use App\Drivers\Payment\OfflinePaymentDriver;
@@ -22,7 +23,8 @@ class PaymentMethodQueryService
     public function __construct()
     {
         $this->drivers = [
-            new OfflinePaymentDriver()
+            new OfflinePaymentDriver(),
+            new MootaPaymentDriver()
         ];
     }
 

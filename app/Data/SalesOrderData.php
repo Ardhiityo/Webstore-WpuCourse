@@ -36,7 +36,7 @@ class SalesOrderData extends Data
         public RegionData $destination,
         #[DataCollectionOf(SalesOrderItemData::class)]
         public DataCollection $items,
-        public SalesShippingData $sales_shipping,
+        public SalesShippingData $shipping,
         public SalesPaymentData $payment,
         public float $shipping_cost,
         public float $sub_total,

@@ -187,7 +187,8 @@ class Checkout extends Component
         $shipping_method = app(ShippingMethodService::class)->getShippingMethod($shipping_hash);
 
         $payment_method_hash = data_get($validated, 'data.payment_method_hash');
-        $payment = app(PaymentMethodQueryService::class)->getPaymentMethodByHash($payment_method_hash);
+        $payment = app(PaymentMethodQueryService::class)
+            ->getPaymentMethodByHash($payment_method_hash);
 
         $checkout = CheckoutData::from([
             'customer' => CustomerData::from(data_get($validated, 'data')),
