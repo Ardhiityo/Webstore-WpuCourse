@@ -47,16 +47,13 @@ class MootaPaymentDriver implements PaymentDriverInterface
 
     public function process(SalesOrderData $sales_order)
     {
-        Log::info(json_encode([
-            'sales_order' => $sales_order,
-            'moota_access_token' => config('services.moota.access_token')
-        ], JSON_PRETTY_PRINT));
+        Log::info(json_encode($sales_order, JSON_PRETTY_PRINT));
 
         $response = Http::withToken(config('services.moota.access_token'))
             ->post('https://api.moota.co/api/v2/create-transaction', [
                 'order_id' => $sales_order->trx_id,
                 'account_id' => data_get($sales_order->payment->payload, 'account_id'),
-                'customer' => [
+                'customers' => [
                     'name' => $sales_order->customer->full_name,
                     'email' => $sales_order->customer->email,
                     'phone' => $sales_order->customer->phone
