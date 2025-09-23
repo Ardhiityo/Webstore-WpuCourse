@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Data\SalesOrderData;
+use App\Data\SalesOrderItemData;
 use App\Events\ShippingReceiptNumberUpdatedEvent;
+use App\Models\Product;
 use App\Models\SalesOrder;
+use App\Models\SalesOrderItem;
+use Illuminate\Support\Facades\DB;
 
 class SalesOrderService
 {
@@ -37,5 +41,16 @@ class SalesOrderService
         return SalesOrderData::from(
             SalesOrder::where('trx_id', $sales_order->trx_id)->first()
         );
+    }
+
+    public function returnStock(SalesOrderData $sales_order)
+    {
+        $sales_order->items->toCollection()->each(function (SalesOrderItemData $item) {
+            DB::transaction(function () use ($item) {
+                Product::lockForUpdate()->update([
+                   'stock' => $item->quantity
+                ]);
+            });
+        });
     }
 }
