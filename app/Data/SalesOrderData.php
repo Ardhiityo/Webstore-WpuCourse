@@ -42,7 +42,8 @@ class SalesOrderData extends Data
         public float $sub_total,
         public float $total,
         public Carbon $due_date_at,
-        public Carbon $created_at
+        public Carbon $created_at,
+        public string|null $status_label
     ) {
         $this->sub_total_formatted = Number::currency($sub_total);
         $total = $shipping_cost + $sub_total;
@@ -100,7 +101,8 @@ class SalesOrderData extends Data
             $sales_order->sub_total,
             $sales_order->total,
             Carbon::parse($sales_order->due_date_at),
-            $sales_order->created_at
+            $sales_order->created_at,
+            $sales_order->status->label()
         );
     }
 }
