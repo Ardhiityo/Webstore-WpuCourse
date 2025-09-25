@@ -5,14 +5,16 @@ namespace App\Models;
 use Spatie\Tags\HasTags;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Product extends Model implements HasMedia
 {
-    use InteractsWithMedia, HasTags;
+    use InteractsWithMedia, HasTags, LogsActivity;
 
     public function registerMediaConversions(?Media $media = null): void
     {
@@ -25,5 +27,11 @@ class Product extends Model implements HasMedia
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'slug', 'stock']);
     }
 }
