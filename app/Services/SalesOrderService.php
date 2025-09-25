@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Data\SalesOrderData;
-use App\Data\SalesOrderItemData;
-use App\Events\ShippingReceiptNumberUpdatedEvent;
 use App\Models\Product;
 use App\Models\SalesOrder;
-use App\Models\SalesOrderItem;
+use App\Data\SalesOrderData;
+use App\Data\SalesOrderItemData;
+use App\States\SalesOrder\Pending;
 use Illuminate\Support\Facades\DB;
+use App\States\SalesOrder\Progress;
+use Illuminate\Support\Facades\Log;
+use App\Events\ShippingReceiptNumberUpdatedEvent;
 
 class SalesOrderService
 {
@@ -21,7 +23,6 @@ class SalesOrderService
         $query->update([
             'shipping_receipt_number' => $number
         ]);
-
 
         $data =  SalesOrderData::fromModel(
             $query->refresh()
@@ -48,9 +49,19 @@ class SalesOrderService
         $sales_order->items->toCollection()->each(function (SalesOrderItemData $item) {
             DB::transaction(function () use ($item) {
                 Product::lockForUpdate()->update([
-                   'stock' => $item->quantity
+                    'stock' => $item->quantity
                 ]);
             });
         });
+    }
+
+    public function approvePaymentUsingTrxID(string $trx_id, float $total): void
+    {
+        $sales_order = SalesOrder::where('trx_id', $trx_id)
+            ->where('total', $total)
+            ->where('status', Pending::class)
+            ->first();
+
+        $sales_order->status->transitionTo(Progress::class);
     }
 }

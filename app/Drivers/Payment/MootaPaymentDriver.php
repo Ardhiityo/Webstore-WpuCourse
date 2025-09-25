@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Http;
 use Spatie\LaravelData\DataCollection;
 use App\Contract\PaymentDriverInterface;
 
-use function Pest\Laravel\json;
-
 class MootaPaymentDriver implements PaymentDriverInterface
 {
     public readonly string $driver;
@@ -47,8 +45,6 @@ class MootaPaymentDriver implements PaymentDriverInterface
 
     public function process(SalesOrderData $sales_order)
     {
-        Log::info(json_encode($sales_order, JSON_PRETTY_PRINT));
-
         $response = Http::withToken(config('services.moota.access_token'))
             ->post('https://api.moota.co/api/v2/create-transaction', [
                 'order_id' => $sales_order->trx_id,
